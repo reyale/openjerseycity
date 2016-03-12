@@ -1,0 +1,27 @@
+columns:
+
+address                
+call code description
+call type
+callcode
+city
+district
+event number
+geo count
+geo error
+geo error.1
+is primary
+latitude
+longitude
+priority
+shift
+time arrived
+time dispatched
+time received
+time received weekday
+unit id
+short_call_code
+type
+pd_code
+description
+combined_call_codes

@@ -1,0 +1,5 @@
+#!/usr/bin/python
+
+import PoliceServiceCalls
+
+PoliceServiceCalls.write_csv_all()
