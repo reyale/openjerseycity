@@ -49,7 +49,7 @@ def parse_xml_data(data):
 
     timestamp = mark
 
-    results.append(Bus(id_text, lat, lon))
+    results.append(Bus(id_text, lat, lon, headsign, destination, timestamp))
     return results
 
 def get_data(source):
