@@ -63,7 +63,7 @@ def get_data(source):
     
     import urllib2
     data = urllib2.urlopen(_sources[source]).read()
-    return parse_xml_data(data)
+    return parse_xml_data(data), mark
 
 def parse_xml_file(fname):
     return parse_xml_file(open(fname,'r').read())
