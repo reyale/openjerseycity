@@ -14,7 +14,6 @@ class Bus:
      self.timestamp = timestamp
 
   def __repr__(self):
-     # need to format the time better?
      return 'bus[id=%s lat=%s long=%s headsign=%s destination=%s time=%s]' % (self.id_text, self.lat, self.lon, self.headsign, self.destination, self.timestamp)
 
 def parse_xml_data(data, mark):
