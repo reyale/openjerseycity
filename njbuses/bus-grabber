@@ -1,0 +1,28 @@
+#!/usr/bin/python
+
+# fetches the NJT statewide bus feed and dumps it to sqlite
+# cron it every minute or 10 seconds or daemon-ize it?
+
+import os
+import sys
+import argparse
+
+import Buses
+import BusDB
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-s', '--source', dest='source', default='nj', help='source name')
+    parser.add_argument('--sqlite-file', dest='sqlite_file', required=True, help='location of the sqlite file')
+    args = parser.parse_args()
+
+    if args.source not in Buses._sources:
+        print args.source + ' is not a valid source.  Valid sources=' + str(Buses._sources.keys())
+        sys.exit(-1)
+    
+    db = BusDB.BusDB(args.sqlite_file)
+    bus_data = Buses.get_data(args.source)
+    db.insert_buses(bus_data)
+
+if __name__ == "__main__":
+    main()
