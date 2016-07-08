@@ -11,7 +11,6 @@ class BusDB:
     def _batch_execute(self, commands):
         cursor = self.conn.cursor()
         for command in commands:
-            print command
             cursor.execute(command)
         self.conn.commit()
 
