@@ -1,3 +1,5 @@
+import os
+import datetime
 import xml.etree.ElementTree
 
 _sources = {
@@ -24,19 +26,30 @@ def parse_xml_data(data):
     for atype in e.findall('bus'):
         fields = { }
         for field in atype.getchildren():
-            if field.tag not in fields:
+            if field.tag not in fields and hasattr(field, 'text'):
+                if field.text is None:
+                    fields[field.tag] = ''
+                    continue
                 fields[field.tag] = field.text
 
         results.append(Bus(**fields))
     return results
 
-def get_data(source):
+def get_data(source, raw_dir=None):
     source = source.lower()
     if source not in _sources:
         raise AssertionError('Unknown source=%s valid sources=%s' % (key, str(sources.keys())))
 
     import urllib2
     data = urllib2.urlopen(_sources[source]).read()
+    if raw_dir:
+        if not os.path.exists(raw_dir):
+            os.makedirs(raw_dir)
+
+        now = datetime.datetime.now()
+        handle = open(raw_dir + '/' + now.strftime('%Y%m%d') + '.' + source + '.xml', 'w')
+        handle.write(data)
+        handle.close()
     return parse_xml_data(data)
 
 def parse_xml_file(fname):
