@@ -47,7 +47,7 @@ def get_data(source, raw_dir=None):
             os.makedirs(raw_dir)
 
         now = datetime.datetime.now()
-        handle = open(raw_dir + '/' + now.strftime('%Y%m%d') + '.' + source + '.xml', 'w')
+        handle = open(raw_dir + '/' + now.strftime('%Y%m%d.%H%M%S') + '.' + source + '.xml', 'w')
         handle.write(data)
         handle.close()
     return parse_xml_data(data)
