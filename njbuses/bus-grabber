@@ -6,6 +6,7 @@
 import os
 import sys
 import argparse
+import datetime
 
 import Buses
 import BusDB
@@ -14,6 +15,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('-s', '--source', dest='source', default='nj', help='source name')
     parser.add_argument('--sqlite-file', dest='sqlite_file', required=True, help='location of the sqlite file')
+    parser.add_argument('--save-raw', dest='raw', default=None, required=False, help='directory to save the raw data to')
     args = parser.parse_args()
 
     if args.source not in Buses._sources:
@@ -21,8 +23,9 @@ def main():
         sys.exit(-1)
     
     db = BusDB.BusDB(args.sqlite_file)
-    bus_data = Buses.get_data(args.source)
-    db.insert_buses(bus_data)
+    now = datetime.datetime.now()
+    bus_data = Buses.get_data(args.source, args.raw)
+    db.insert_buses(bus_data, now)
 
 if __name__ == "__main__":
     main()
