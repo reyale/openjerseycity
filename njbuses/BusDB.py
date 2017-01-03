@@ -74,7 +74,7 @@ class SQLite(DB):
             self.conn = sqlite3.connect(self.fname)
 
 class MySQL(DB):
-    _create_table_string = '''CREATE TABLE IF NOT EXISTS positions (pkey integer primary key auto_increment, lat real, lon real, ar text, bid text, c text, cars text, consist text, d text, dd text, dn text, fs text, id text, m text, op text, pd text, pdRtpiFeedName text, pid text, rt text, rtRtpiFeedName text, rtdd text, rtpiFeedName text, run text, wid1 text, wid2 text, timestamp text)'''
+    _create_table_string = '''CREATE TABLE IF NOT EXISTS positions (pkey integer primary key auto_increment, lat real, lon real, ar varchar(255), bid varchar(255), c varchar(255), cars varchar(255), consist varchar(255), d varchar(255), dd varchar(255), dn varchar(255), fs varchar(255), id varchar(255), m varchar(255), op varchar(255), pd varchar(255), pdRtpiFeedName varchar(255), pid varchar(255), rt varchar(255), rtRtpiFeedName varchar(255), rtdd varchar(255), rtpiFeedName varchar(255), run varchar(255), wid1 varchar(255), wid2 varchar(255), timestamp varchar(255))'''
  
     _insert_string = 'INSERT INTO positions VALUES(NULL, %f, %f, "%s", "%s", "%s", "%s", "%s", "%s", "%s", "%s", "%s", "%s", "%s", "%s", "%s", "%s", "%s", "%s", "%s", "%s", "%s", "%s", "%s", "%s", "%s")'
 
