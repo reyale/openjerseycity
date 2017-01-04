@@ -44,7 +44,10 @@ def main():
         sys.exit(-2)
 
     now = datetime.datetime.now()
-    bus_data = Buses.get_data(args.source, args.raw)
+    if args.raw:
+        bus_data = Buses.parse_bus_xml(Buses.get_xml_data_save_raw(args.source, 'all_buses', args.raw))
+    else:
+        bus_data = Buses.parse_bus_xml(Buses.get_xml_data(args.source, 'all_buses'))
     db.insert_positions(bus_data, now)
 
 if __name__ == "__main__":

@@ -2,9 +2,33 @@ import os
 import datetime
 import xml.etree.ElementTree
 
+#API like: https://github.com/harperreed/transitapi/wiki/Unofficial-Bustracker-API
+
 _sources = {
-  'nj': 'http://mybusnow.njtransit.com/bustime/map/getBusesForRouteAll.jsp'
+  'nj': 'http://mybusnow.njtransit.com/bustime/map/'
 }
+
+_api = { 
+  'all_buses': 'getBusesForRouteAll.jsp',
+  'routes': 'getRoutePoints.jsp',
+  'pattern_points': 'getPatternPoints.jsp',
+  'stop_predicitons': 'getStopPredictions.jsp',
+  'bus_predictions': 'getBusPredictions.jsp',
+  'buses_for_route': 'getBusesForRoute.jsp',
+  'buses_for_route_all': 'getBusesForRouteAll.jsp',
+  'schedules': 'schedules.jsp',
+  'time_and_temp': 'getTimeAndTemp.jsp',
+  'route_directions_xml':  'routeDirectionStopAsXML',
+}
+
+def _gen_command(source, func, **kwargs):
+  result = _sources[source] + _api[func] 
+  params = ''
+  for k,v in kwargs.items():
+    params = params + k + '=' + v + '&'
+  if params:
+    result += result + '?' + params[:-1]
+  return result
 
 class Bus:
   def __init__(self, **kwargs):
@@ -19,7 +43,7 @@ class Bus:
      out_string = ' '.join([k+'='+v for k,v in line]) 
      return 'bus[%s]' % out_string
 
-def parse_xml_data(data):
+def parse_bus_xml(data):
     results = []
 
     e = xml.etree.ElementTree.fromstring(data)
@@ -35,22 +59,21 @@ def parse_xml_data(data):
         results.append(Bus(**fields))
     return results
 
-def get_data(source, raw_dir=None):
-    source = source.lower()
-    if source not in _sources:
-        raise AssertionError('Unknown source=%s valid sources=%s' % (key, str(sources.keys())))
-
+def get_xml_data(source, function, **kwargs): 
     import urllib2
-    data = urllib2.urlopen(_sources[source]).read()
-    if raw_dir:
-        if not os.path.exists(raw_dir):
-            os.makedirs(raw_dir)
+    data = urllib2.urlopen(_gen_command(source, function, **kwargs)).read()
+    return data
 
-        now = datetime.datetime.now()
-        handle = open(raw_dir + '/' + now.strftime('%Y%m%d.%H%M%S') + '.' + source + '.xml', 'w')
-        handle.write(data)
-        handle.close()
-    return parse_xml_data(data)
+def get_xml_data_save_raw(source, function, raw_dir, **kwargs):
+    data = get_xml_data(source, function, **kwargs)
+    if not os.path.exists(raw_dir):
+      os.makedirs(raw_dir)
 
-def parse_xml_file(fname):
-    return parse_xml_data(open(fname,'r').read())
+    now = datetime.datetime.now()
+    handle = open(raw_dir + '/' + now.strftime('%Y%m%d.%H%M%S') + '.' + source + '.xml', 'w')
+    handle.write(data)
+    handle.close()
+    return data 
+
+def parse_bus_xml_file(fname):
+    return parse_bus_xml(open(fname,'r').read())
