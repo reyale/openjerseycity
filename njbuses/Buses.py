@@ -27,7 +27,7 @@ def _gen_command(source, func, **kwargs):
   for k,v in kwargs.items():
     params = params + k + '=' + v + '&'
   if params:
-    result += result + '?' + params[:-1]
+    result += '?' + params[:-1]
   return result
 
 class Bus:
